@@ -27,13 +27,13 @@ app.post('/book',async(request,response)=>{
         const newBook ={
             title: request.body.title,
             author: request.body.author,
-            pubishingYear: request.body.publishingYear
+            publishingYear: request.body.publishingYear
         }
         const book= await Book.create(newBook);
         return response.status(201).send(book);
     } catch (error) {
         console.log(error.message);
-        response.status(500).send({message:error.message});
+        response.status(500).send({message:'Internal Server Error'});
     }
 
 })
@@ -49,5 +49,5 @@ app.listen(PORT,()=>{
 });
 })
 .catch((error)=>{
-    console.log(error)
-})
+    console.log(error);
+});
