@@ -1,6 +1,7 @@
 import express from "express";
 import { PORT,mongoDBURL } from "./config.js";
 import mongoose from 'mongoose';
+import booksRoute from "./routes/booksRoute.js";
 import { Book } from "./models/bookModel.js";
 
 const app = express();
@@ -12,31 +13,7 @@ app.get('/',(request,response)=>{
     return response.status(234).send('Sending request via get function')
 });
 
-//route foor save book
-app.post('/book',async(request,response)=>{
-    try {
-        if(
-        !request.body.title ||
-        !request.body.author ||
-        !request.body.publishingYear 
-        ){
-            return response.status(400).send({
-                message:'Send all required fields: tittle,author,publishingYear',
-            })
-        }
-        const newBook ={
-            title: request.body.title,
-            author: request.body.author,
-            publishingYear: request.body.publishingYear
-        }
-        const book= await Book.create(newBook);
-        return response.status(201).send(book);
-    } catch (error) {
-        console.log(error.message);
-        response.status(500).send({message:'Internal Server Error'});
-    }
-
-})
+app.use('/books',booksRoute)
 
 mongoose
 .connect(mongoDBURL)
